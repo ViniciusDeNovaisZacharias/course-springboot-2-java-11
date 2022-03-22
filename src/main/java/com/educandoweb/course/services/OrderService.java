@@ -1,33 +1,26 @@
-package com.educandoweb.course.resources;
+package com.educandoweb.course.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.Order;
-import com.educandoweb.course.services.OrderService;
+import com.educandoweb.course.repositories.OrderRepository;
 
-@RestController
-@RequestMapping(value = "/orders")
-public class OrderResource {
+@Service
+public class OrderService {
 
-	@Autowired 
-	private OrderService service;
+	@Autowired
+	private OrderRepository repository;
 	
-	@GetMapping
-	public ResponseEntity<List<Order>> findAll() {
-		List<Order> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+	public List<Order> findAll() {
+		return repository.findAll();
 	}
 	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Order> findById(@PathVariable Long id) {
-		Order obj = service.findById(id);
-		return ResponseEntity.ok().body(obj);
+	public Order findById(Long id) {
+		Optional<Order> obj = repository.findById(id);
+		return obj.get();
 	}
 }
